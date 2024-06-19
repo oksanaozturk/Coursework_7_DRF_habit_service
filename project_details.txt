@@ -1,0 +1,20 @@
+ЭТАПЫ РЕАЛИЗАЦИИ ПРОЕКТА и ВАЖНЫЕ Замечания
+
+1) Создание модели User
+2) Создание модели Habit
+  - Реализация поля СВЯЗАННОСТИ (Связанная привычка)
+  Пример: https://stackoverflow.com/questions/15285626/django-self-referential-foreign-key
+3) Создание файла serializers.py и добавление в него сериалайзеров для каждой модели
+
+4) Создание контроллеров в файле views.py
+
+5) Далее установка pip install djangorestframework-simplejwt
+   - Заносим в раздел Приложений "rest_framework_simplejwt" и requirements.txt
+   - Добавляем в settings.py
+   SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+
+6) Валидация. Создание файла
