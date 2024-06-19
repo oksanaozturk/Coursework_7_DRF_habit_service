@@ -22,7 +22,7 @@ class Habit(models.Model):
     associated_habit - указывается только для Полезной привычки.
     """
 
-    user = models.ForeignKey(
+    owner = models.ForeignKey(
         User,
         verbose_name="Пользователь",
         related_name="habits",
@@ -49,18 +49,18 @@ class Habit(models.Model):
     # Ещё один вариант написания associated_habit = models.ForeignKey("self"). Ссылка на эту же модель.
     associated_habit = models.ForeignKey(
         "Habit",
-        verbose_name="Связанная привычка",
+        verbose_name="Связанная приятная привычка",
         on_delete=models.SET_NULL,
         help_text="Данные признак указывается только для Полезной привычки, "
         "если есть связанная с ней, Приятная привычка",
         **NULLABLE
     )
     periodicity = models.PositiveIntegerField(
-        default=1,
         verbose_name="Периодичность выполнения",
         choices=PERIOD_CHOICES,
         help_text="Введите периодичность выполнения привычки для напоминания, "
         "1 раз в каждые сколько дней.",
+        **NULLABLE
     )
     bonus = models.CharField(
         max_length=256,
@@ -75,6 +75,7 @@ class Habit(models.Model):
         "времени на выполнение "
         "Полезной привычки "
         "(в секундах).",
+        **NULLABLE
     )
     is_public = models.BooleanField(default=True, verbose_name="Признак публичности")
 
@@ -83,4 +84,4 @@ class Habit(models.Model):
         verbose_name_plural = "Привычки"
 
     def __str__(self):
-        return f"{self.user} будет делать {self.action} в {self.time} в {self.place}"
+        return f"{self.owner} будет делать {self.action} в {self.time} в {self.place}"
