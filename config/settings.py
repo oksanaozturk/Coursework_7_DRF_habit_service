@@ -195,7 +195,12 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # Программирование задачи на выполнение
 CELERY_BEAT_SCHEDULE = {
     'blocking_a_user': {
-        'task': 'habits.send_tg_habits_reminder',  # Путь к задаче
+        'task': 'habits.tasks.send_tg_habits_message',  # Путь к задаче
         'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
     },
 }
+
+# Настройка отправки сообщения в телеграмм
+TELEGRAM_URL = 'https://api.telegram.org/bot'
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
