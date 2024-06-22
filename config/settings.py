@@ -26,7 +26,7 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-baf^znp$mky*m5ewl^)jtr^_#i@bv0+nu%y)+9vw9#!by&v7bo"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,11 +47,15 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "users",
     "habits",
+    "corsheaders",
+    "drf_yasg",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -138,6 +142,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
+# Нужны для настройки/работы с документами, которые загружал пользователь (фото, аватарки, видео, аудиофайлф)
+# /работают также как и STATIC_URL
+# Необходимо создать папку 'media' в корне проекта
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Настройки для фильтрации модуля django-filter
 REST_FRAMEWORK = {
     # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -153,4 +163,39 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# Настройка CORS
+# От Frontend адреса
+CORS_ALLOWED_ORIGINS = [*ALLOWED_HOSTS]  # Замените на адрес вашего фронтенд-сервера
+
+# От Backend адреса
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",  # Замените на адрес вашего фронтенд-сервера
+    # и добавьте адрес бэкенд-сервера
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+# Celery Configuration Options
+CELERY_TIMEZONE = TIME_ZONE  # Переменная TIME_ZONE есть выше на странице
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# Добавляем настройки для Redis
+# set the celery broker url
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+
+# set the celery result backend
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+
+# Добавляем настройки для SCHEDULE
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# Программирование задачи на выполнение
+CELERY_BEAT_SCHEDULE = {
+    'blocking_a_user': {
+        'task': 'habits.send_tg_habits_reminder',  # Путь к задаче
+        'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
+    },
 }
