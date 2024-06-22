@@ -56,6 +56,7 @@ class Habit(models.Model):
         **NULLABLE
     )
     periodicity = models.PositiveIntegerField(
+        default=1,
         verbose_name="Периодичность выполнения",
         choices=PERIOD_CHOICES,
         help_text="Введите периодичность выполнения привычки для напоминания, "
@@ -70,6 +71,7 @@ class Habit(models.Model):
         **NULLABLE
     )
     execution_duration = models.PositiveIntegerField(
+        default=120,
         verbose_name="Длительность выполнения",
         help_text="Сколько потребуется "
         "времени на выполнение "
