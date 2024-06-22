@@ -42,10 +42,10 @@ class ExecutionDurationValidator:
             if int(execution_duration) > 120:
                 raise serializers.ValidationError('Время выполнения задания не должно превышать 120 секунд.')
 
-        associated_habit = dict(value).get("associated_habit")
-        execution_duration = dict(value).get(self.execution_duration)
-        if not associated_habit and not execution_duration:
-            raise serializers.ValidationError('Длительность выполнения Полезной привычки обязательный атрибут')
+        # associated_habit = dict(value).get("associated_habit")
+        # execution_duration = dict(value).get(self.execution_duration)
+        # if not associated_habit and not execution_duration:
+        #     raise serializers.ValidationError('Длительность выполнения Полезной привычки обязательный атрибут')
 
 
 class AssociatedHabitValidator:
@@ -107,7 +107,7 @@ class PeriodicityValidator:
             if int(periodicity) > 7:
                 raise serializers.ValidationError('Нельзя выполнять привычку реже, чем 1 раз в 7 дней.')
 
-        associated_habit = dict(value).get("associated_habit")
-        periodicity = dict(value).get(self.periodicity)
-        if not associated_habit and not periodicity:
-            raise serializers.ValidationError('Периодичность выполнения Полезной привычки обязательный атрибут')
+        # associated_habit = dict(value).get("associated_habit")
+        # periodicity = dict(value).get(self.periodicity)
+        # if not associated_habit and not periodicity:
+        #     raise serializers.ValidationError('Периодичность выполнения Полезной привычки обязательный атрибут')
