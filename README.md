@@ -20,36 +20,37 @@
 <summary> Инструкция по развертыванию проекта</summary>
 
 
-* ### Для разворачивания проекта потребуется создать и заполнить файл .env  по шаблону файла env.sample
+1) ### Для разворачивания проекта потребуется создать и заполнить файл .env  по шаблону файла env.sample
+
 #### Добавьте секретный ключ Вашего проекта
 SECRET_KEY=
 
 #### Добавте настройки для подключения к базе данных (ДБ должна быть создана)
-- POSTGRES_DB=
-- POSTGRES_USER=
-- POSTGRES_HOST=
-- POSTGRES_PORT=
-- POSTGRES_PASSWORD=
+ - POSTGRES_DB=
+ - POSTGRES_USER=
+ - POSTGRES_HOST=
+ - POSTGRES_PORT=
+ - POSTGRES_PASSWORD=
 
 #### Настройки для отправки сообщения в Телеграмм-бот
-BOT_TOKEN=
-TELEGRAM_CHAT_ID=
+ - BOT_TOKEN=
+ - TELEGRAM_CHAT_ID=
 
-####  Добавьте настройки для celery
-- CELERY_BROKER_URL=
-- CELERY_RESULT_BACKEND=)
+#### Добавьте настройки для celery
+ - CELERY_BROKER_URL=
+ - CELERY_RESULT_BACKEND=)
 
 
-### Используется виртуальное окружение - venv, зависимости записаны в файл requirements.txt
+2) ### Используется виртуальное окружение - venv, зависимости записаны в файл requirements.txt
   - pip install -r requirements.txt
 
-### Команда для запуска Приложения: 
+3) ### Команда для запуска Приложения: 
   - python manage.py runserver
 
-### Команда для запуска redis: 
+4) ### Команда для запуска redis: 
   - Для Windows в терминале UBUNTU командой redis-server
 
-### Команда для запуска celery-bea и celery worker одной командой:
+5) ### Команда для запуска celery-bea и celery worker одной командой:
   - celery -A condig worker --beat --scheduler django --loglevel=info
   - Для Windows (в разных Pycharm запустите команды): 
     * celery -A config worker -l INFO -P eventlet
