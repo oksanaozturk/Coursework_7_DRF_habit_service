@@ -8,6 +8,7 @@ class AssociatedHabitBonusValidator:
     field1 - associated_habit,
     field2 - bonus.
     """
+
     def __init__(self, field1, field2):
         self.field1 = field1
         self.field2 = field2
@@ -19,8 +20,10 @@ class AssociatedHabitBonusValidator:
         bonus = dict(value).get(self.field2)
 
         if associated_habit and bonus:
-            raise serializers.ValidationError('Одновременно не допускается заполнение обоих полей: '
-                                              'Выберите associated_habit или bonus')
+            raise serializers.ValidationError(
+                "Одновременно не допускается заполнение обоих полей: "
+                "Выберите associated_habit или bonus"
+            )
 
 
 class ExecutionDurationValidator:
@@ -28,6 +31,7 @@ class ExecutionDurationValidator:
     Класс валидации проверки длительности выполнения задания.
     Время выполнения должно быть не больше 120 секунд.
     """
+
     def __init__(self, execution_duration):
         self.execution_duration = execution_duration
 
@@ -38,7 +42,9 @@ class ExecutionDurationValidator:
         if self.execution_duration in value:
             execution_duration = dict(value).get(self.execution_duration)
             if int(execution_duration) > 120:
-                raise serializers.ValidationError('Время выполнения задания не должно превышать 120 секунд.')
+                raise serializers.ValidationError(
+                    "Время выполнения задания не должно превышать 120 секунд."
+                )
 
         # associated_habit = dict(value).get("associated_habit")
         # execution_duration = dict(value).get(self.execution_duration)
@@ -62,8 +68,10 @@ class AssociatedHabitValidator:
         associated_habit = dict(value).get(self.field)
 
         if associated_habit and not associated_habit.is_pleasant_habit:
-            raise serializers.ValidationError('В связанные привычки могут попадать только привычки '
-                                              'с признаком приятной привычки.')
+            raise serializers.ValidationError(
+                "В связанные привычки могут попадать только привычки "
+                "с признаком приятной привычки."
+            )
 
 
 class IsPleasantHabitBonusValidator:
@@ -85,10 +93,14 @@ class IsPleasantHabitBonusValidator:
         bonus = dict(value).get(self.field2)
 
         if bonus is not None and is_pleasant_habit is True:
-            raise serializers.ValidationError('У приятной привычки не может быть вознаграждения.')
+            raise serializers.ValidationError(
+                "У приятной привычки не может быть вознаграждения."
+            )
 
         if is_pleasant_habit and associated_habit:
-            raise serializers.ValidationError('У приятной привычки не может быть признака связанной привычки.')
+            raise serializers.ValidationError(
+                "У приятной привычки не может быть признака связанной привычки."
+            )
 
 
 class PeriodicityValidator:
@@ -103,7 +115,9 @@ class PeriodicityValidator:
         if self.periodicity in value:
             periodicity = dict(value).get(self.periodicity)
             if int(periodicity) > 7:
-                raise serializers.ValidationError('Нельзя выполнять привычку реже, чем 1 раз в 7 дней.')
+                raise serializers.ValidationError(
+                    "Нельзя выполнять привычку реже, чем 1 раз в 7 дней."
+                )
 
         # associated_habit = dict(value).get("associated_habit")
         # periodicity = dict(value).get(self.periodicity)

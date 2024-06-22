@@ -14,14 +14,14 @@ def send_tg_habits_message():
     :return:
     """
 
-    today = timezone.now().time()     # .today().date отобразится в формате времени
+    today = timezone.now().time()  # .today().date отобразится в формате времени
     print(today)
-    habits = Habit.objects.all()     # фильтруем привычки
+    habits = Habit.objects.all()  # фильтруем привычки
 
     for habit in habits:
         if habit.time <= today:
             # Формируем сообщение для текущей привычки
-            message = f'Привет! Тебя ждет полезная привычка {habit.action} в {habit.time}, место - {habit.place}'
+            message = f"Привет! Тебя ждет полезная привычка {habit.action} в {habit.time}, место - {habit.place}"
             send_tg_message(settings.TELEGRAM_CHAT_ID, message)
 
         # Обновление времени выполнения привычки в зависимости от periodicity

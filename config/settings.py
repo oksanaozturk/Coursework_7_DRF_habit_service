@@ -151,12 +151,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Настройки для фильтрации модуля django-filter
 REST_FRAMEWORK = {
     # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 # Настройки для работы библиотеки rest_framework_simplejwt:
@@ -194,13 +194,15 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # Программирование задачи на выполнение
 CELERY_BEAT_SCHEDULE = {
-    'blocking_a_user': {
-        'task': 'habits.tasks.send_tg_habits_message',  # Путь к задаче
-        'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
+    "blocking_a_user": {
+        "task": "habits.tasks.send_tg_habits_message",  # Путь к задаче
+        "schedule": timedelta(
+            minutes=1
+        ),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
     },
 }
 
 # Настройка отправки сообщения в телеграмм
-TELEGRAM_URL = 'https://api.telegram.org/bot'
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
+TELEGRAM_URL = "https://api.telegram.org/bot"
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
