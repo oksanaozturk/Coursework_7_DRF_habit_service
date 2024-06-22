@@ -165,7 +165,7 @@ celery -A my_project beat —loglevel=info / celery -A config beat -l INFO (Во
 !!! ПОМОЩЬ ОТ НАСТАВНИКА!!!
 
 Привет, Оксана!
-
+СНАЧАЛА ЗАПУСКАЕМ redis в ТЕРМИНАЛЕ UBUNTU командой redis-server
 СНАЧАЛА ЗАПУСКАЕМ НАШ ПРОЕКТ
 
 Лучше сначала запускать celery worker, чтобы он сразу подхватил задачи переданные beat, а потом уже beat
