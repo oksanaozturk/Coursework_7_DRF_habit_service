@@ -55,6 +55,34 @@ CORS_ALLOW_ALL_ORIGINS = False
 
 =============================================================================
 
+# Возможен вот такой вариант записи
+ CORS_ALLOWED_ORIGINS = [
+     'http://localhost:8000',
+    'http://127.0.0.1:8000'
+]
+# Возможен вот такой вариант записи
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
+]
+CORS_ALLOW_ALL_ORIGINS = False
+=============================================================================
+
+# Корректировки CORS от Наставника Олега Маслова.
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+
+    'http://localhost:8000',
+
+]
+
+CORS_ALLOWED_ORIGINS = CORS_ORIGIN_WHITELIST
+
+CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
+
+==============================================================================
+
 8) ИНТЕГРАЦИЯ
 * Установите библиотеку Requests с помощью pip:
 pip install requests
@@ -133,3 +161,96 @@ celery -A config worker -l info -P eventlet
 
 celery -A my_project worker —loglevel=info / celery -A config worker —loglevel=info (Запустила в 1-м терминале в Pycharm)
 celery -A my_project beat —loglevel=info / celery -A config beat -l INFO (Во 2-м терминале в Pycharm)
+
+!!! ПОМОЩЬ ОТ НАСТАВНИКА!!!
+
+Привет, Оксана!
+
+СНАЧАЛА ЗАПУСКАЕМ НАШ ПРОЕКТ
+
+Лучше сначала запускать celery worker, чтобы он сразу подхватил задачи переданные beat, а потом уже beat
+
+Давай попробуем запустить beat так:
+
+- celery -A config beat -l INFO -S django
+
+А воркер так:
+
+- celery -A config worker -l INFO -P eventlet
+
+Предварительно необходимо установить eventlet в окружение:
+
+pip install eventlet
+
+==========================================================================
+
+ЧТОБЫ ПРОВАЛИТЬСЯ В ФУНКЦИЮ, КЛАСС ИЛИ МЕТОД, нужно:
+ * выделить синим цветом объект
+ * зажать Ctrl
+ * Нажать курсором мышки на выделенный объект
+
+ =========================================================================
+ ПРОВЕРЯЕМ НАСТРОЙКИ celery и celery beat
+
+ # тестовая задача проверки celery (в habits/tasks.py)
+ @shared_task
+ def send_time_test():
+     today = timezone.now().today().date()
+     print(today)
+
+# Программирование задачи на выполнение (в settings.py)
+CELERY_BEAT_SCHEDULE = {
+    'blocking_a_user': {
+        'task': 'habits.tasks.send_time_test',  # Путь к задаче
+        'schedule': timedelta(minutes=1),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
+    },
+}
+
+ДАЛЕЕ ЗАПУСКАЕМ celery и celery beat (как описано выше)
+===========================================================================
+
+ ОТПРАВКА УВЕДОМЛЕНИЯ В ТЕЛЕГРАММ БОТ
+
+1) РЕГИСТРИРУЕМ собственного БОТА и получаем его ТОКЕН
+
+Для того, чтобы зарегистрировать собственного бота в Telegram, вам понадобится помощь другого бота,
+которого зовут BotFather.
+Он предложит придумать имя, которое будет отображаться в списке контактов
+и юзернейм ботонейм по которому ваш бот будет доступен через ссылки и в поиске.
+Позже, при помощи BotFather, можно будет изменять специфические настройки бота, или установить для него юзерпик ботопик.
+
+2) ПОЛУЧАЕМ ID чата
+Не смотря на то, что бот пока ничего не умеет, сейчас он уже доступен для поиска и добавления в чаты.
+
+Добавьте его в свой список контактов. Проще всего это сделать пройдя по ссылке вида t.me/botname
+Отправьте ему любое сообщение
+Через браузер открывайте ссылку https://api.telegram.org/bot%TOKEN%/getUpdates заменив %TOKEN% на строку,
+которую вам выдал BotFather ранее
+Вы увидите JSON, который будет содержать все необходимые данные о последнем сообщении.
+
+3) ПИШЕМ задачу отправки сообщения в habits/services.py
+
+import requests
+from django.conf import settings
+
+
+def send_tg_message(telegram_id, message):
+    """
+    Функция отправки сообщения в Телеграмм-бот.
+    :param telegram_id: id чата с пользователем в Telegram
+    :param message: сообщение, которое будет отправлено пользователю
+    :return:
+    """
+    params = {
+        'text': message,
+        'chat_id': telegram_id,
+    }
+    response = requests.post(f'{settings.TELEGRAM_URL}{settings.TELEGRAM_TOKEN}/sendMessage', params=params)
+
+4) УСТАНАВЛИВАЕМ настройкив для отправки в settings.py
+
+# Настройка отправки сообщения в телеграмм
+TELEGRAM_URL = 'https://api.telegram.org/bot'
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+TELEGRAM_USER_ID = os.getenv('TELEGRAM_USER_ID')
+
