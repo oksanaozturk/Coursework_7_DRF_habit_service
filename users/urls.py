@@ -22,4 +22,3 @@ urlpatterns = [
     path("login/", TokenObtainPairView.as_view(permission_classes=(AllowAny,)), name='login'),
     path("token/refresh/", TokenRefreshView.as_view(permission_classes=(AllowAny,)), name='token_refresh'),
 ]
-
