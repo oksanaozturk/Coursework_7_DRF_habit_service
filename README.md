@@ -56,3 +56,5 @@ TELEGRAM_CHAT_ID=
     * celery -A config beat -l INFO -S django
 
 </details>
+
+### Автор проекта https://github.com/oksanaozturk
