@@ -83,9 +83,9 @@ class Habit(models.Model):
     )
     is_public = models.BooleanField(default=True, verbose_name="Признак публичности")
 
-    start_date = models.DateField(default=timezone.now, verbose_name="Дата старта", **NULLABLE,
+    start_date = models.DateField(auto_now=True, verbose_name="Дата старта", **NULLABLE,
                                   help_text="Введите дату начала Полезной привычки")
-    send_date = models.DateField(default=timezone.now, verbose_name="Следующая дата выполнения привычки",
+    send_date = models.DateField(auto_now=True, verbose_name="Следующая дата выполнения привычки",
                                  **NULLABLE)
 
     class Meta:
