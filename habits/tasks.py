@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta
+import requests
+
 from celery import shared_task
-from django.utils import timezone
 
 from config import settings
 from habits.models import Habit
@@ -13,30 +15,43 @@ def send_tg_habits_message():
     привычки необходимо выполнять, если дата выполнения - сегодня.
     :return:
     """
-
-    today = timezone.now().time()  # .today().date отобразится в формате времени
-    print(today)
-    habits = Habit.objects.all()  # фильтруем привычки
+    time_now = datetime.now().time().replace(second=0, microsecond=0)
+    date_now = datetime.now().date()
+    print(time_now, date_now)
+    habits = Habit.objects.filter(owner__is_active=True)  # фильтруем привычки, те у которых есть хозяин
 
     for habit in habits:
-        if habit.time <= today:
+        if habit.send_date == date_now:
             # Формируем сообщение для текущей привычки
-            message = f"Привет! Тебя ждет полезная привычка {habit.action} в {habit.time}, место - {habit.place}"
-            send_tg_message(settings.TELEGRAM_CHAT_ID, message)
+            message = f"Привет! Сегодня Тебя ждет полезная привычка {habit.action} в {habit.time}, место -{habit.place}"
+            try:
+                send_tg_message(settings.TELEGRAM_CHAT_ID, message)
+                get_date_send(habit, date_now, time_now)
 
-        # Обновление времени выполнения привычки в зависимости от periodicity
-        # if habit.periodicity == 1:
-        #     habit.time += today.timedelta(days=1)
-        # elif habit.periodicity == 2:
-        #     habit.time += today.timedelta(days=2)
-        # elif habit.periodicity == 3:
-        #     habit.time += today.timedelta(days=3)
-        # elif habit.periodicity == 4:
-        #     habit.time += today.timedelta(days=4)
-        # elif habit.periodicity == 5:
-        #     habit.time += today.timedelta(days=5)
-        # elif habit.periodicity == 6:
-        #     habit.time += today.timedelta(days=6)
-        # elif habit.periodicity == 7:
-        #     habit.time += today.timedelta(days=7)
-        # habit.save()
+            except requests.RequestException as e:
+                print(f"Ошибка при отправке сообщения в Telegram: {e}")
+
+            except Exception as e:
+                print(f"Произошла непредвиденная ошибка: {e}")
+
+
+def get_date_send(habit, date_now, time_now):
+    """
+    Функция Обновление времени выполнения привычки в зависимости от periodicity (send_next_date).
+    """
+    if habit.send_date <= date_now and habit.time <= time_now:
+        if habit.periodicity == 1:
+            habit.send_date += timedelta(days=1)
+        elif habit.periodicity == 2:
+            habit.send_date += timedelta(days=2)
+        elif habit.periodicity == 3:
+            habit.send_date += timedelta(days=3)
+        elif habit.periodicity == 4:
+            habit.send_date += timedelta(days=4)
+        elif habit.periodicity == 5:
+            habit.send_date += timedelta(days=5)
+        elif habit.periodicity == 6:
+            habit.send_date += timedelta(days=6)
+        elif habit.periodicity == 7:
+            habit.send_date += timedelta(days=7)
+        habit.save()
