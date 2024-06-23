@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from users.models import User
 
@@ -81,6 +82,11 @@ class Habit(models.Model):
         **NULLABLE,
     )
     is_public = models.BooleanField(default=True, verbose_name="Признак публичности")
+
+    start_date = models.DateField(default=timezone.now, verbose_name="Дата старта", **NULLABLE,
+                                  help_text="Введите дату начала Полезной привычки")
+    send_date = models.DateField(default=timezone.now, verbose_name="Следующая дата выполнения привычки",
+                                 **NULLABLE)
 
     class Meta:
         verbose_name = "Привычка"
