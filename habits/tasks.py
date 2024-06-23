@@ -18,7 +18,8 @@ def send_tg_habits_message():
     time_now = datetime.now().time().replace(second=0, microsecond=0)
     date_now = datetime.now().date()
     print(time_now, date_now)
-    habits = Habit.objects.filter(owner__is_active=True)  # фильтруем привычки, те у которых есть хозяин
+    # фильтруем привычки, те у которых есть хозяин и не являются связанными
+    habits = Habit.objects.filter(owner__is_active=True, is_pleasant_habit=False)
 
     for habit in habits:
         if habit.send_date == date_now:
@@ -39,7 +40,7 @@ def get_date_send(habit, date_now, time_now):
     """
     Функция Обновление времени выполнения привычки в зависимости от periodicity (send_next_date).
     """
-    if habit.send_date <= date_now and habit.time <= time_now:
+    if habit.send_date <= date_now:
         if habit.periodicity == 1:
             habit.send_date += timedelta(days=1)
         elif habit.periodicity == 2:
