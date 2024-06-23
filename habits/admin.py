@@ -10,6 +10,8 @@ class HabitAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "owner",
+        "start_date",
+        "send_date",
         "place",
         "time",
         "action",
