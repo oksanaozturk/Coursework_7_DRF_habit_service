@@ -254,3 +254,10 @@ TELEGRAM_URL = 'https://api.telegram.org/bot'
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 TELEGRAM_USER_ID = os.getenv('TELEGRAM_USER_ID')
 
+=======================================================================
+
+!!!! БЫЛА ОШИБКА В ВЫВОДЕ ПОЛЕЙ!!!! НЕОБХОДИМА ВОТ ТАКАЯ ЗАПИСЬ ДАТЫ!!!
+
+          "start_date": self.habit.start_date.strftime('%Y-%m-%d'),
+          "send_date": self.habit.send_date.strftime('%Y-%m-%d'),
+
