@@ -23,10 +23,11 @@ def send_tg_habits_message():
 
     for habit in habits:
         if habit.send_date == date_now:
+            chat_id = habit.owner.chat_id
             # Формируем сообщение для текущей привычки
             message = f"Привет! Сегодня Тебя ждет полезная привычка {habit.action} в {habit.time}, место-{habit.place}"
             try:
-                send_tg_message(settings.TELEGRAM_CHAT_ID, message)
+                send_tg_message(chat_id, message)
                 get_date_send(habit, date_now)
 
             except requests.RequestException as e:
