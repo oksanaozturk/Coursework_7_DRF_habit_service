@@ -18,7 +18,7 @@ def send_tg_habits_message():
     time_now = datetime.now().time().replace(second=0, microsecond=0)
     date_now = datetime.now().date()
     print(time_now, date_now)
-    # фильтруем привычки, те у которых есть хозяин и не являются связанными
+    # фильтруем привычки, те у которых есть хозяин и не являются связанными(т.е.приятными привычками в качестве награлы)
     habits = Habit.objects.filter(owner__is_active=True, is_pleasant_habit=False)
 
     for habit in habits:
@@ -27,7 +27,7 @@ def send_tg_habits_message():
             message = f"Привет! Сегодня Тебя ждет полезная привычка {habit.action} в {habit.time}, место -{habit.place}"
             try:
                 send_tg_message(settings.TELEGRAM_CHAT_ID, message)
-                get_date_send(habit, date_now, time_now)
+                get_date_send(habit, date_now)
 
             except requests.RequestException as e:
                 print(f"Ошибка при отправке сообщения в Telegram: {e}")
@@ -36,7 +36,7 @@ def send_tg_habits_message():
                 print(f"Произошла непредвиденная ошибка: {e}")
 
 
-def get_date_send(habit, date_now, time_now):
+def get_date_send(habit, date_now):
     """
     Функция Обновление времени выполнения привычки в зависимости от periodicity (send_next_date).
     """
