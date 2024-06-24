@@ -34,7 +34,6 @@ SECRET_KEY=
 
 #### Настройки для отправки сообщения в Телеграмм-бот
  - BOT_TOKEN=
- - TELEGRAM_CHAT_ID=
 
 #### Добавьте настройки для celery
  - CELERY_BROKER_URL=
