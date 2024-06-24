@@ -107,11 +107,11 @@ class HabitTestCase(APITestCase):
                 "bonus": "Получишь 100 рублей",
                 "execution_duration": 90,
                 "is_public": True,
-                "start_date": self.habit.start_date.strftime('%Y-%m-%d'),
-                "send_date": self.habit.send_date.strftime('%Y-%m-%d'),
+                "start_date": self.habit.start_date.strftime("%Y-%m-%d"),
+                "send_date": self.habit.send_date.strftime("%Y-%m-%d"),
                 "owner": self.user.pk,
                 "associated_habit": None,
-                 },
+            },
         )
 
     def test_habit_update(self):
@@ -162,8 +162,8 @@ class HabitTestCase(APITestCase):
                     "bonus": "Получишь 100 рублей",
                     "execution_duration": 90,
                     "is_public": True,
-                    "send_date": self.habit.send_date.strftime('%Y-%m-%d'),
-                    "start_date": self.habit.start_date.strftime('%Y-%m-%d'),
+                    "send_date": self.habit.send_date.strftime("%Y-%m-%d"),
+                    "start_date": self.habit.start_date.strftime("%Y-%m-%d"),
                     "owner": self.user.pk,
                     "associated_habit": None,
                 }

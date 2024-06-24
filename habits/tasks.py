@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-import requests
 
+import requests
 from celery import shared_task
 
 from config import settings
@@ -18,13 +18,13 @@ def send_tg_habits_message():
     time_now = datetime.now().time().replace(second=0, microsecond=0)
     date_now = datetime.now().date()
     print(time_now, date_now)
-    # фильтруем привычки, те у которых есть хозяин и не являются связанными(т.е.приятными привычками в качестве награлы)
+    # фильтруем привычки, те у которых есть хозяин и не связанные (т.е.приятными привычками в качестве награлы)
     habits = Habit.objects.filter(owner__is_active=True, is_pleasant_habit=False)
 
     for habit in habits:
         if habit.send_date == date_now:
             # Формируем сообщение для текущей привычки
-            message = f"Привет! Сегодня Тебя ждет полезная привычка {habit.action} в {habit.time}, место -{habit.place}"
+            message = f"Привет! Сегодня Тебя ждет полезная привычка {habit.action} в {habit.time}, место-{habit.place}"
             try:
                 send_tg_message(settings.TELEGRAM_CHAT_ID, message)
                 get_date_send(habit, date_now)
