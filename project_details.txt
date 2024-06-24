@@ -292,6 +292,8 @@ def send_tg_message(message, chat_id):
     * today = date.today()
 https://www.geeksforgeeks.org/get-current-date-using-python/?ysclid=lxrp6730p2658851264
 
+https://docs.djangoproject.com/en/5.0/ref/models/fields/
+
 =============================================================================
 
 НА ВОПРОС ПО ПОВОДУ ПОЛУЧЕНИЯ chat_id
