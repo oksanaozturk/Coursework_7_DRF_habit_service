@@ -197,8 +197,8 @@ CELERY_BEAT_SCHEDULE = {
     "blocking_a_user": {
         "task": "habits.tasks.send_tg_habits_message",  # Путь к задаче
         "schedule": timedelta(
-            minutes=1
-        ),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день)
+            days=1
+        ),  # Расписание выполнения задачи (например, timedelta(days=1) каждый день/ minutes=1 каждую минуту)
     },
 }
 
