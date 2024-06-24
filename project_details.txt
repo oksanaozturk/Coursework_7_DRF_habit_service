@@ -261,3 +261,25 @@ TELEGRAM_USER_ID = os.getenv('TELEGRAM_USER_ID')
           "start_date": self.habit.start_date.strftime('%Y-%m-%d'),
           "send_date": self.habit.send_date.strftime('%Y-%m-%d'),
 
+========================================================================
+
+Вариант Маши:
+
+def send_tg_message(message, chat_id):
+    """
+    Отправка сообщения в Telegram
+    :param message: текст сообщения для отправки
+    :param chat_id: id чата с пользователем в Telegram
+    """
+    params = {
+        'text': message,
+        'chat_id': chat_id
+    }
+    try:
+        response = requests.get(f'https://api.telegram.org/bot{settings.TG_BOT_TOKEN}/sendMessage', params=params)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"Ошибка при отправке сообщения в Telegram: {e}")
+
+    except Exception as e:
+        print(f"Произошла непредвиденная ошибка: {e}")
