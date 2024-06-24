@@ -32,6 +32,7 @@ class User(AbstractUser):
         help_text="Введите страну проживания",
         **NULLABLE
     )
+    chat_id = models.CharField(max_length=50, verbose_name='ID чата в Telegram', **NULLABLE)
 
     # Выбираем полем для авторизации email
     USERNAME_FIELD = "email"
