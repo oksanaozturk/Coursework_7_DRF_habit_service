@@ -205,4 +205,3 @@ CELERY_BEAT_SCHEDULE = {
 # Настройка отправки сообщения в телеграмм
 TELEGRAM_URL = "https://api.telegram.org/bot"
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
