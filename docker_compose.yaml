@@ -1,0 +1,79 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:latest
+    restart: on-failure
+    expose:
+      - "6379"
+
+  # Название сервиса. В данном случае описываем КОНТЕЙНЕР С postgres
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    env_file:
+      - .env
+    expose:
+      - "5432"
+    # Данная настройка необходима, чтобы наши изменения сохранялись в postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  # Название сервиса. В данном случае описываем КОНТЕЙНЕР С Приложением
+  app:
+    # В данном случае контейнер будет содираться на основе Dockerfile  в нашем проекте
+    build: .
+    # Настройка для интерактивного режима
+    tty: true
+    ports:
+      - "8000:8000"
+    # Добавляем команду для запуска. Она была перенесена из файла Dockerfile
+    command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    # Описываем наши зависимости. Контейнер postgres должен быть готовым к работе раньша
+    depends_on:
+      db:
+        condition: service_healthy
+    # Данная настройка необходима, чтобы наши изменения сохранялись в app
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+  # Название сервиса.
+  celery:
+    build: .
+    tty: true
+    command: celery -A config worker -l INFO  # celery -A config worker -l INFO -P eventlet
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - app
+    env_file:
+      - .env
+
+  celery-beat:
+    build: .
+    tty: true
+    command: celery -A config beat -l INFO  # celery -A config beat -l INFO -S django
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - app
+    env_file:
+      - .env
+
+
+# Данная настройка необходима, чтобы наши изменения сохранялись в postgres
+volumes:
+  pg_data:
