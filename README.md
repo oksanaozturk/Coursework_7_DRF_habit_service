@@ -86,6 +86,15 @@ docker-compose up --build
 ```
 http://0.0.0.0:8000/
 ```
+6) Для завершения работы: вводим в консоли Pycharm команду для остановки всех контейнеров
+```
+docker-compose stop
+```
+7) Для очистки от всех неиспользуемых образов и контейнеров, используем команду
+```
+docker system prune -a
+```
+
 </details>
 
 ### Автор проекта https://github.com/oksanaozturk
