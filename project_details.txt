@@ -454,3 +454,4 @@ volumes:
 
 - python -Xutf8 manage.py dumpdata auth.group -o data_groups.json (весь проект в целом)
 - python -Xutf8 manage.py dumpdata -o data.json (только группы из Админки)
+- python -Xutf8 manage.py dumpdata users -o users.json (для приложения users)
